@@ -1,0 +1,49 @@
+extends ../layout
+
+block content
+  a.btn.btn-secondary.btn-sm(href="/" style="margin-bottom:16px") ← Каталог
+  .card
+    h2.page-title= product.product_name
+    .form-row
+      div
+        table(style="width:auto")
+          tr
+            th МНН
+            td= product.inn_name || '—'
+          tr
+            th Группа
+            td= product.group_name
+          tr
+            th Производитель
+            td= product.manufacturer || '—'
+          tr
+            th Форма выпуска
+            td= product.form || '—'
+          tr
+            th Дозировка
+            td= product.dosage || '—'
+          tr
+            th Штрихкод
+            td= product.barcode || '—'
+          tr
+            th Тип отпуска
+            td
+              span(class=`badge ${product.is_prescription ? 'badge-rx' : 'badge-otc'}`)
+                = product.is_prescription ? 'По рецепту' : 'Без рецепта'
+          tr
+            th Остаток
+            td
+              if product.quantity > 0
+                | #{product.quantity} шт.
+              else
+                span(style="color:#dc3545") Нет в наличии
+          tr
+            th Цена
+            td(style="font-size:22px;font-weight:700;color:#1a6b3c") #{Number(product.price).toFixed(2)} ₽
+      if product.description
+        div
+          p(style="color:#666;font-size:13px;line-height:1.6")= product.description
+
+    if user && user.role === 'customer' && product.quantity > 0
+      div(style="margin-top:16px")
+        a.btn.btn-primary(href="/orders/new") Забронировать

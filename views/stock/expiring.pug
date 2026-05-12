@@ -1,0 +1,31 @@
+extends ../layout
+
+block content
+  h2.page-title Товары с истекающим / истёкшим сроком годности
+  a.btn.btn-secondary(href="/stock" style="margin-bottom:16px") ← Склад
+  .card
+    .table-wrap
+      table
+        thead
+          tr
+            th Товар
+            th Поставщик
+            th Остаток
+            th Срок годности
+            th Статус
+        tbody
+          if rows.length === 0
+            tr
+              td(colspan=5 style="text-align:center;color:#aaa") Нет проблемных товаров
+          each r in rows
+            - const exp = new Date(r.expires_at); const today = new Date(); const diff = Math.ceil((exp-today)/(1000*60*60*24));
+            tr
+              td= r.product_name
+              td= r.supplier_name
+              td= r.quantity
+              td= exp.toLocaleDateString('ru-RU')
+              td
+                if diff < 0
+                  span.badge.badge-rx Просрочено
+                else
+                  span.badge.badge-low Истекает через #{diff} дн.

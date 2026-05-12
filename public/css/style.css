@@ -1,0 +1,171 @@
+/* ── Reset & Base ───────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-size: 14px;
+  background: #f4f6f9;
+  color: #333;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+a { color: #1a73e8; text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── Navbar ─────────────────────────────────────────────────── */
+.navbar {
+  background: #1a6b3c;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  height: 52px;
+  flex-shrink: 0;
+}
+.navbar-brand {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+  text-decoration: none;
+}
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+.navbar-links a {
+  color: #d4f0e0;
+  font-size: 13px;
+  text-decoration: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background 0.15s;
+}
+.navbar-links a:hover { background: rgba(255,255,255,0.15); color: #fff; }
+.user-info {
+  margin-left: auto;
+  color: #a8dfc0;
+  font-size: 13px;
+  margin-right: 8px;
+}
+
+/* ── Container ──────────────────────────────────────────────── */
+.container {
+  max-width: 1200px;
+  margin: 24px auto;
+  padding: 0 16px;
+  flex: 1;
+}
+
+/* ── Alerts ─────────────────────────────────────────────────── */
+.alert {
+  padding: 10px 16px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  font-size: 13px;
+}
+.alert-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+.alert-danger  { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+
+/* ── Cards / Sections ───────────────────────────────────────── */
+.card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.08);
+  padding: 20px 24px;
+  margin-bottom: 20px;
+}
+.page-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #1a3c2a;
+}
+
+/* ── Tables ─────────────────────────────────────────────────── */
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 9px 12px; text-align: left; border-bottom: 1px solid #e8ecef; }
+th { background: #f0f4f8; font-weight: 600; color: #555; font-size: 12px; text-transform: uppercase; }
+tr:hover td { background: #f7fafc; }
+
+/* ── Forms ──────────────────────────────────────────────────── */
+.form-group { margin-bottom: 14px; }
+.form-group label { display: block; font-size: 12px; font-weight: 600; color: #555; margin-bottom: 4px; }
+.form-control {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #cdd5df;
+  border-radius: 5px;
+  font-size: 14px;
+  transition: border-color .15s;
+}
+.form-control:focus { outline: none; border-color: #1a73e8; box-shadow: 0 0 0 2px rgba(26,115,232,.15); }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+/* ── Buttons ────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 16px;
+  border: none; border-radius: 5px; cursor: pointer;
+  font-size: 13px; font-weight: 500;
+  transition: filter .15s;
+  text-decoration: none;
+}
+.btn:hover { filter: brightness(0.92); text-decoration: none; }
+.btn-primary  { background: #1a6b3c; color: #fff; }
+.btn-secondary{ background: #6c757d; color: #fff; }
+.btn-danger   { background: #dc3545; color: #fff; }
+.btn-warning  { background: #fd7e14; color: #fff; }
+.btn-sm       { padding: 4px 10px; font-size: 12px; }
+
+/* ── Product Grid ───────────────────────────────────────────── */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 16px;
+}
+.product-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.08);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.product-card .prod-name { font-weight: 600; font-size: 14px; }
+.product-card .prod-price{ font-size: 18px; font-weight: 700; color: #1a6b3c; }
+.product-card .prod-meta { font-size: 12px; color: #888; }
+.badge {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.badge-rx   { background: #fff3cd; color: #856404; }
+.badge-otc  { background: #d1ecf1; color: #0c5460; }
+.badge-low  { background: #f8d7da; color: #721c24; }
+
+/* ── POS (Касса) ────────────────────────────────────────────── */
+.pos-layout { display: grid; grid-template-columns: 1fr 340px; gap: 20px; }
+.pos-item-row { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid #eee; }
+.pos-total-block { font-size: 22px; font-weight: 700; color: #1a6b3c; margin-top: 12px; }
+
+/* ── Stat Cards ─────────────────────────────────────────────── */
+.stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+.stat-card { background:#fff; border-radius:8px; box-shadow:0 1px 4px rgba(0,0,0,.08); padding:20px; text-align:center; }
+.stat-card .stat-val { font-size:28px; font-weight:700; color:#1a6b3c; }
+.stat-card .stat-lbl { font-size:12px; color:#888; margin-top:4px; }
+
+/* ── Search bar ─────────────────────────────────────────────── */
+.search-bar { display:flex; gap:10px; margin-bottom:20px; }
+.search-bar .form-control { flex:1; }
+
+/* ── Footer ─────────────────────────────────────────────────── */
+.footer { background:#1a3c2a; color:#8cb89e; text-align:center; padding:12px; font-size:12px; }

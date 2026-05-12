@@ -1,0 +1,34 @@
+extends ../layout
+
+block content
+  h2.page-title Приём товара
+  .card(style="max-width:600px")
+    form(action="/stock/receive" method="POST")
+      .form-group
+        label Товар *
+        select.form-control(name="product_id" required)
+          option(value="") — выберите —
+          each p in products
+            option(value=p.id)= p.name
+      .form-group
+        label Поставщик *
+        select.form-control(name="supplier_id" required)
+          option(value="") — выберите —
+          each s in suppliers
+            option(value=s.id)= s.name
+      .form-row
+        .form-group
+          label Количество *
+          input.form-control(type="number" name="quantity" min="1" required)
+        .form-group
+          label Закупочная цена *
+          input.form-control(type="number" name="cost_price" step="0.01" min="0" required)
+      .form-row
+        .form-group
+          label Срок годности *
+          input.form-control(type="date" name="expires_at" required)
+        .form-group
+          label Номер накладной
+          input.form-control(type="text" name="invoice_number")
+      button.btn.btn-primary(type="submit") Оприходовать
+      a.btn.btn-secondary(href="/stock" style="margin-left:8px") Отмена

@@ -1,0 +1,38 @@
+extends ../layout
+
+block content
+  a.btn.btn-secondary.btn-sm(href="/orders/my" style="margin-bottom:16px") ← Мои заказы
+  .card(style="max-width:600px")
+    h2.page-title Заказ №#{order.id}
+    table(style="width:auto;margin-bottom:16px")
+      tr
+        th Дата
+        td= new Date(order.created_at).toLocaleString('ru-RU')
+      tr
+        th Статус
+        td= order.status
+      if order.comment
+        tr
+          th Комментарий
+          td= order.comment
+    .table-wrap
+      table
+        thead
+          tr
+            th Товар
+            th Кол-во
+            th Цена
+            th Сумма
+        tbody
+          - let total = 0
+          each item in items
+            - total += item.quantity * item.unit_price
+            tr
+              td= item.product_name
+              td= item.quantity
+              td= Number(item.unit_price).toFixed(2) + ' ₽'
+              td= (item.quantity * item.unit_price).toFixed(2) + ' ₽'
+    p(style="font-size:18px;font-weight:700;color:#1a6b3c;margin-top:12px") Итого: #{total.toFixed(2)} ₽
+    if order.status === 'pending'
+      form(action=`/orders/${order.id}/cancel` method="POST" style="margin-top:12px")
+        button.btn.btn-danger(type="submit" onclick="return confirm('Отменить заказ?')") Отменить заказ

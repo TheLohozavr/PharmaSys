@@ -1,0 +1,33 @@
+extends ../../layout
+
+block content
+  h2.page-title Управление товарами
+  div(style="margin-bottom:16px")
+    a.btn.btn-primary(href="/admin/products/new") + Добавить товар
+  .card
+    .table-wrap
+      table
+        thead
+          tr
+            th ID
+            th Наименование
+            th МНН
+            th Группа
+            th Форма
+            th Рецепт
+            th Цена
+            th
+        tbody
+          each p in products
+            tr
+              td= p.id
+              td= p.name
+              td= p.inn_name || '—'
+              td= p.group_name
+              td= p.form || '—'
+              td= p.is_prescription ? 'Да' : 'Нет'
+              td= Number(p.price).toFixed(2) + ' ₽'
+              td
+                a.btn.btn-secondary.btn-sm(href=`/admin/products/${p.id}/edit`) Ред.
+                form(action=`/admin/products/${p.id}/delete` method="POST" style="display:inline;margin-left:4px")
+                  button.btn.btn-danger.btn-sm(type="submit" onclick="return confirm('Удалить?')") Удал.

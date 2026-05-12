@@ -1,0 +1,59 @@
+extends ../layout
+
+block content
+  h2.page-title Отчёты
+
+  .card
+    h3(style="margin-bottom:12px") Продажи по дням
+    form(action="/admin/reports" method="GET" style="display:flex;gap:10px;margin-bottom:16px")
+      .form-group(style="margin:0;flex:1")
+        label С
+        input.form-control(type="date" name="date_from" value=date_from)
+      .form-group(style="margin:0;flex:1")
+        label По
+        input.form-control(type="date" name="date_to" value=date_to)
+      button.btn.btn-primary(type="submit" style="align-self:flex-end") Фильтр
+    .table-wrap
+      table
+        thead
+          tr
+            th Дата
+            th Количество продаж
+            th Выручка
+        tbody
+          - let grandTotal = 0
+          if salesReport.length === 0
+            tr
+              td(colspan=3 style="text-align:center;color:#aaa") Нет данных
+          each row in salesReport
+            - grandTotal += Number(row.revenue)
+            tr
+              td= new Date(row.dt).toLocaleDateString('ru-RU')
+              td= row.cnt
+              td= Number(row.revenue).toFixed(2) + ' ₽'
+          if salesReport.length > 0
+            tr(style="font-weight:700;background:#f0f4f8")
+              td Итого
+              td= salesReport.reduce((s,r)=>s+Number(r.cnt),0)
+              td= grandTotal.toFixed(2) + ' ₽'
+
+  .card
+    h3(style="margin-bottom:12px") Просроченный товар
+    .table-wrap
+      table
+        thead
+          tr
+            th Товар
+            th Поставщик
+            th Остаток
+            th Срок годности
+        tbody
+          if expiredStock.length === 0
+            tr
+              td(colspan=4 style="text-align:center;color:#aaa") Просроченных товаров нет
+          each r in expiredStock
+            tr(style="background:#fff3cd")
+              td= r.name
+              td= r.supplier
+              td= r.quantity
+              td= new Date(r.expires_at).toLocaleDateString('ru-RU')

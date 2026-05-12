@@ -1,0 +1,37 @@
+extends ../layout
+
+block content
+  h2.page-title Каталог товаров
+
+  form.search-bar(action="/" method="GET")
+    input.form-control(type="text" name="search" placeholder="Поиск по названию, МНН, производителю…" value=search)
+    select.form-control(name="group_id" style="max-width:200px")
+      option(value="") Все группы
+      each g in groups
+        option(value=g.id selected=(group_id==g.id)) #{g.name}
+    button.btn.btn-primary(type="submit") Найти
+    if search || group_id
+      a.btn.btn-secondary(href="/") Сбросить
+
+  if products.length === 0
+    .card
+      p(style="color:#888") Товары не найдены.
+  else
+    .product-grid
+      each p in products
+        .product-card
+          .prod-name= p.product_name
+          if p.inn_name
+            .prod-meta МНН: #{p.inn_name}
+          .prod-meta= p.group_name
+          if p.manufacturer
+            .prod-meta #{p.manufacturer}#{p.form ? ' · ' + p.form : ''}#{p.dosage ? ' · ' + p.dosage : ''}
+          .prod-price #{Number(p.price).toFixed(2)} ₽
+          span(class=`badge ${p.is_prescription ? 'badge-rx' : 'badge-otc'}`)
+            = p.is_prescription ? 'Рецептурный' : 'Безрецептурный'
+          if p.quantity < 5
+            span.badge.badge-low Мало: #{p.quantity} шт.
+          div(style="display:flex;gap:8px;margin-top:8px")
+            a.btn.btn-secondary.btn-sm(href=`/product/${p.product_id}`) Подробнее
+            if user && user.role === 'customer'
+              a.btn.btn-primary.btn-sm(href="/orders/new") Заказать

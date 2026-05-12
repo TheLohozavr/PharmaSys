@@ -1,0 +1,48 @@
+extends ../layout
+
+block content
+  .card(style="max-width:600px;margin:0 auto")
+    h2.page-title Чек №#{sale.id}
+    table(style="width:auto;margin-bottom:16px")
+      tr
+        th Дата
+        td= new Date(sale.created_at).toLocaleString('ru-RU')
+      tr
+        th Фармацевт
+        td= sale.employee
+      if sale.customer
+        tr
+          th Покупатель
+          td= sale.customer
+      tr
+        th Статус
+        td= sale.status === 'completed' ? 'Выполнено' : 'Возврат'
+    h3(style="margin-bottom:8px") Состав чека
+    .table-wrap
+      table
+        thead
+          tr
+            th Товар
+            th Кол-во
+            th Цена
+            th Сумма
+        tbody
+          each item in items
+            tr
+              td= item.product_name
+              td= item.quantity
+              td= Number(item.unit_price).toFixed(2) + ' ₽'
+              td= (item.quantity * item.unit_price).toFixed(2) + ' ₽'
+    table(style="width:auto;margin-top:12px")
+      tr
+        th Скидка
+        td= Number(sale.discount_amt).toFixed(2) + ' ₽'
+      tr
+        th Бонусы использовано
+        td= sale.bonus_used
+      tr
+        th(style="font-size:16px") Итого
+        td(style="font-size:20px;font-weight:700;color:#1a6b3c") #{Number(sale.total).toFixed(2)} ₽
+    div(style="margin-top:16px;display:flex;gap:8px")
+      a.btn.btn-primary(href="/sales") Новая продажа
+      a.btn.btn-secondary(href="/sales/history") История

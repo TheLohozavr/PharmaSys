@@ -1,0 +1,26 @@
+extends ../../layout
+
+block content
+  h2.page-title Покупатели
+  .card
+    .table-wrap
+      table
+        thead
+          tr
+            th ФИО
+            th Логин
+            th Телефон
+            th Карта
+            th Бонусы
+            th Скидка %
+            th Дата рег.
+        tbody
+          each c in customers
+            tr
+              td= c.full_name
+              td= c.login
+              td= c.phone || '—'
+              td= c.card_number || '—'
+              td= c.bonus_points
+              td= c.discount_pct + '%'
+              td= new Date(c.created_at).toLocaleDateString('ru-RU')

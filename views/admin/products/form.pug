@@ -1,0 +1,46 @@
+extends ../../layout
+
+block content
+  h2.page-title= product ? 'Редактировать товар' : 'Добавить товар'
+  .card(style="max-width:700px")
+    form(action=product ? `/admin/products/${product.id}` : '/admin/products' method="POST")
+      .form-row
+        .form-group
+          label Наименование *
+          input.form-control(type="text" name="name" value=product ? product.name : '' required)
+        .form-group
+          label МНН
+          input.form-control(type="text" name="inn_name" value=product ? (product.inn_name||'') : '')
+      .form-row
+        .form-group
+          label Группа *
+          select.form-control(name="group_id" required)
+            each g in groups
+              option(value=g.id selected=(product && product.group_id==g.id))= g.name
+        .form-group
+          label Производитель
+          input.form-control(type="text" name="manufacturer" value=product ? (product.manufacturer||'') : '')
+      .form-row-3
+        .form-group
+          label Форма выпуска
+          input.form-control(type="text" name="form" value=product ? (product.form||'') : '')
+        .form-group
+          label Дозировка
+          input.form-control(type="text" name="dosage" value=product ? (product.dosage||'') : '')
+        .form-group
+          label Штрихкод
+          input.form-control(type="text" name="barcode" value=product ? (product.barcode||'') : '')
+      .form-row
+        .form-group
+          label Цена (₽) *
+          input.form-control(type="number" name="price" step="0.01" min="0" value=product ? product.price : '' required)
+        .form-group(style="display:flex;align-items:flex-end;gap:8px")
+          label
+            input(type="checkbox" name="is_prescription" value="1" checked=product && product.is_prescription)
+            |  По рецепту
+      .form-group
+        label Описание
+        textarea.form-control(name="description" rows="3")= product ? (product.description||'') : ''
+      div(style="margin-top:16px;display:flex;gap:8px")
+        button.btn.btn-primary(type="submit") Сохранить
+        a.btn.btn-secondary(href="/admin/products") Отмена

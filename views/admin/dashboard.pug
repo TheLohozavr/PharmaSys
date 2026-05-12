@@ -1,0 +1,26 @@
+extends ../layout
+
+block content
+  h2.page-title Панель администратора
+  .stat-grid
+    .stat-card
+      .stat-val= cnt_products
+      .stat-lbl Товаров в каталоге
+    .stat-card
+      .stat-val= cnt_employees
+      .stat-lbl Активных сотрудников
+    .stat-card
+      .stat-val= cnt_customers
+      .stat-lbl Покупателей
+    .stat-card
+      .stat-val= Number(today_sales).toFixed(0) + ' ₽'
+      .stat-lbl Выручка сегодня
+
+  .card
+    h3(style="margin-bottom:12px") Быстрые ссылки
+    div(style="display:flex;gap:10px;flex-wrap:wrap")
+      a.btn.btn-primary(href="/admin/products/new") + Добавить товар
+      a.btn.btn-primary(href="/admin/suppliers/new") + Поставщик
+      a.btn.btn-primary(href="/admin/employees/new") + Сотрудник
+      a.btn.btn-secondary(href="/admin/reports") Отчёты
+      a.btn.btn-warning(href="/stock/expiring") Истекающие сроки

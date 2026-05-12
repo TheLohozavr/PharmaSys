@@ -1,0 +1,37 @@
+extends ../layout
+
+block content
+  h2.page-title Мои заказы
+  div(style="margin-bottom:16px")
+    a.btn.btn-primary(href="/orders/new") + Новый заказ
+  .card
+    .table-wrap
+      table
+        thead
+          tr
+            th №
+            th Дата
+            th Сумма
+            th Статус
+            th
+        tbody
+          if orders.length === 0
+            tr
+              td(colspan=5 style="text-align:center;color:#aaa") У вас ещё нет заказов
+          each o in orders
+            tr
+              td= o.id
+              td= new Date(o.created_at).toLocaleString('ru-RU')
+              td= o.total ? Number(o.total).toFixed(2) + ' ₽' : '—'
+              td
+                case o.status
+                  when 'pending'
+                    span.badge(style="background:#fff3cd;color:#856404") Ожидает
+                  when 'ready'
+                    span.badge(style="background:#d1ecf1;color:#0c5460") Готов к выдаче
+                  when 'completed'
+                    span.badge(style="background:#d4edda;color:#155724") Выполнен
+                  when 'cancelled'
+                    span.badge(style="background:#e9ecef;color:#555") Отменён
+              td
+                a.btn.btn-secondary.btn-sm(href=`/orders/${o.id}`) Детали

@@ -1,0 +1,30 @@
+extends ../layout
+
+block content
+  .card(style="max-width:440px;margin:40px auto")
+    h2.page-title Регистрация покупателя
+    form(action="/auth/register" method="POST")
+      .form-group
+        label ФИО *
+        input.form-control(type="text" name="full_name" required)
+      .form-group
+        label Логин *
+        input.form-control(type="text" name="login" required)
+      .form-row
+        .form-group
+          label Пароль *
+          input.form-control(type="password" name="password" required)
+        .form-group
+          label Повторите пароль *
+          input.form-control(type="password" name="password2" required)
+      .form-row
+        .form-group
+          label Телефон
+          input.form-control(type="text" name="phone")
+        .form-group
+          label Email
+          input.form-control(type="email" name="email")
+      button.btn.btn-primary(type="submit" style="width:100%") Зарегистрироваться
+    p(style="margin-top:16px;text-align:center;font-size:13px")
+      | Уже есть аккаунт?&nbsp;
+      a(href="/auth/login") Войти

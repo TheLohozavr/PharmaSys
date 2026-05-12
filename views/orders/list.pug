@@ -1,0 +1,29 @@
+extends ../layout
+
+block content
+  h2.page-title Заказы покупателей
+  .card
+    .table-wrap
+      table
+        thead
+          tr
+            th №
+            th Покупатель
+            th Дата
+            th Сумма
+            th Статус
+            th Действие
+        tbody
+          each o in orders
+            tr
+              td= o.id
+              td= o.customer
+              td= new Date(o.created_at).toLocaleString('ru-RU')
+              td= o.total ? Number(o.total).toFixed(2) + ' ₽' : '—'
+              td= o.status
+              td
+                form(action=`/orders/${o.id}/status` method="POST" style="display:flex;gap:6px")
+                  select.form-control(name="status" style="width:auto;padding:4px")
+                    each s in ['pending','ready','completed','cancelled']
+                      option(value=s selected=(o.status===s))= s
+                  button.btn.btn-primary.btn-sm(type="submit") ОК

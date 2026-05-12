@@ -1,0 +1,33 @@
+extends ../layout
+
+block content
+  h2.page-title Остатки на складе
+  div(style="display:flex;gap:8px;margin-bottom:16px")
+    a.btn.btn-primary(href="/stock/receive") + Принять товар
+    a.btn.btn-warning(href="/stock/expiring") ⚠ Истекающие сроки
+  .card
+    .table-wrap
+      table
+        thead
+          tr
+            th ID
+            th Наименование
+            th Группа
+            th Остаток
+            th Ближ. срок годности
+            th Цена
+            th
+        tbody
+          each s in stock
+            tr
+              td= s.product_id
+              td= s.product_name
+              td= s.group_name
+              td(class=s.quantity < 5 ? 'text-danger' : '')
+                = s.quantity
+                if s.quantity < 5
+                  |  ⚠
+              td= s.nearest_expiry ? new Date(s.nearest_expiry).toLocaleDateString('ru-RU') : '—'
+              td= Number(s.price).toFixed(2) + ' ₽'
+              td
+                a.btn.btn-secondary.btn-sm(href=`/product/${s.product_id}`) →

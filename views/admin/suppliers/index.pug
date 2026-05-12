@@ -1,0 +1,25 @@
+extends ../../layout
+
+block content
+  h2.page-title Поставщики
+  div(style="margin-bottom:16px")
+    a.btn.btn-primary(href="/admin/suppliers/new") + Добавить поставщика
+  .card
+    .table-wrap
+      table
+        thead
+          tr
+            th Наименование
+            th ИНН
+            th Телефон
+            th Email
+            th
+        tbody
+          each s in suppliers
+            tr
+              td= s.name
+              td= s.inn || '—'
+              td= s.phone || '—'
+              td= s.email || '—'
+              td
+                a.btn.btn-secondary.btn-sm(href=`/admin/suppliers/${s.id}/edit`) Ред.

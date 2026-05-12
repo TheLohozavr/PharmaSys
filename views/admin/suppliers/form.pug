@@ -1,0 +1,26 @@
+extends ../../layout
+
+block content
+  h2.page-title= supplier ? 'Редактировать поставщика' : 'Новый поставщик'
+  .card(style="max-width:500px")
+    form(action=supplier ? `/admin/suppliers/${supplier.id}` : '/admin/suppliers' method="POST")
+      .form-group
+        label Наименование *
+        input.form-control(type="text" name="name" value=supplier ? supplier.name : '' required)
+      .form-row
+        .form-group
+          label ИНН
+          input.form-control(type="text" name="inn" value=supplier ? (supplier.inn||'') : '')
+        .form-group
+          label Телефон
+          input.form-control(type="text" name="phone" value=supplier ? (supplier.phone||'') : '')
+      .form-row
+        .form-group
+          label Email
+          input.form-control(type="email" name="email" value=supplier ? (supplier.email||'') : '')
+        .form-group
+          label Адрес
+          input.form-control(type="text" name="address" value=supplier ? (supplier.address||'') : '')
+      div(style="display:flex;gap:8px;margin-top:12px")
+        button.btn.btn-primary(type="submit") Сохранить
+        a.btn.btn-secondary(href="/admin/suppliers") Отмена

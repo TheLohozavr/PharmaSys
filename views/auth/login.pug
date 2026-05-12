@@ -1,0 +1,16 @@
+extends ../layout
+
+block content
+  .card(style="max-width:400px;margin:40px auto")
+    h2.page-title Вход в систему
+    form(action="/auth/login" method="POST")
+      .form-group
+        label Логин
+        input.form-control(type="text" name="login" required autofocus)
+      .form-group
+        label Пароль
+        input.form-control(type="password" name="password" required)
+      button.btn.btn-primary(type="submit" style="width:100%") Войти
+    p(style="margin-top:16px;text-align:center;font-size:13px")
+      | Нет аккаунта?&nbsp;
+      a(href="/auth/register") Зарегистрируйтесь

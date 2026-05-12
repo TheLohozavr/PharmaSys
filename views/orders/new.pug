@@ -1,0 +1,53 @@
+extends ../layout
+
+block content
+  h2.page-title Новый заказ (бронирование)
+  .card(style="max-width:700px")
+    form#order-form(action="/orders" method="POST")
+      h3(style="margin-bottom:12px") Выберите товары
+      .table-wrap
+        table
+          thead
+            tr
+              th Товар
+              th Цена
+              th Остаток
+              th Кол-во
+          tbody
+            each p in products
+              tr
+                td= p.name
+                td= Number(p.price).toFixed(2) + ' ₽'
+                td= p.quantity
+                td
+                  input(type="number" name=`items[${p.id}][quantity]` min="0" max=`${p.quantity}` value="0"
+                        data-id=`${p.id}` data-price=`${p.price}` data-name=`${p.name}`
+                        style="width:70px;padding:4px;border:1px solid #ccc;border-radius:4px"
+                        onchange="recalcOrder()")
+                  input(type="hidden" name=`items[${p.id}][product_id]` value=`${p.id}`)
+      .form-group(style="margin-top:12px")
+        label Комментарий
+        textarea.form-control(name="comment" rows="2")
+      div(style="margin-top:12px;font-size:16px") Итого: <strong id="order-total">0.00</strong> ₽
+      div(style="margin-top:12px;display:flex;gap:8px")
+        button.btn.btn-primary(type="submit" onclick="return prepareOrder()") Оформить заказ
+        a.btn.btn-secondary(href="/") Отмена
+
+  script.
+    function recalcOrder() {
+      let total = 0;
+      document.querySelectorAll('[data-price]').forEach(el => {
+        const q = parseInt(el.value) || 0;
+        total += q * parseFloat(el.dataset.price);
+      });
+      document.getElementById('order-total').textContent = total.toFixed(2);
+    }
+    function prepareOrder() {
+      // Убрать нулевые позиции
+      let hasItems = false;
+      document.querySelectorAll('[data-price]').forEach(el => {
+        if ((parseInt(el.value)||0) > 0) hasItems = true;
+      });
+      if (!hasItems) { alert('Выберите хотя бы один товар'); return false; }
+      return true;
+    }

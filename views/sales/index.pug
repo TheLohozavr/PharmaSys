@@ -1,0 +1,97 @@
+extends ../layout
+
+block content
+  h2.page-title Касса — Оформление продажи
+
+  .pos-layout
+    //- Левая панель: добавление товаров
+    .card
+      h3(style="margin-bottom:12px;font-size:15px;color:#1a3c2a") Товары в чеке
+
+      .form-group
+        label Штрихкод или ID товара
+        .search-bar(style="margin-bottom:4px")
+          input.form-control#barcode-input(
+            type="text"
+            placeholder="Введите штрихкод или числовой ID, нажмите Enter"
+            autocomplete="off"
+          )
+          button.btn.btn-primary#btn-scan(type="button") Добавить
+        span#lookup-error(style="color:#dc3545;font-size:12px;")
+
+      p(style="font-size:12px;color:#999;margin-bottom:8px")
+        | Подсказка: для поиска по ID введите число (например: 1, 2, 3)
+        br
+        | Для поиска по штрихкоду введите код (например: 4607001234561)
+
+      #item-list(style="margin-top:8px;min-height:100px")
+
+    //- Правая панель: покупатель и итог
+    .card
+      h3(style="margin-bottom:10px;font-size:15px;color:#1a3c2a") Покупатель
+
+      .form-group
+        label Карта лояльности или логин
+        .search-bar(style="margin-bottom:4px")
+          input.form-control#card-input(type="text" placeholder="Карта CARD-XXXXX или логин")
+          button.btn.btn-secondary#btn-find-customer(type="button") Найти
+      #customer-info(style="font-size:13px;color:#555;min-height:40px;margin-bottom:8px")
+
+      hr(style="border:none;border-top:1px solid #e8ecef;margin:12px 0")
+
+      table(style="width:100%;font-size:13px;margin-bottom:8px")
+        tr
+          td(style="color:#888") Скидка:
+          td(style="text-align:right")
+            strong#discount-amount 0.00
+            |  ₽
+        tr
+          td(style="color:#888") Бонусы к списанию:
+          td(style="text-align:right")
+            strong#bonus-used-display 0
+            |  бонусов
+
+      .pos-total-block
+        | К оплате:&nbsp;
+        span#total-amount 0.00
+        | &nbsp;₽
+
+      div(style="margin-top:16px;display:flex;gap:8px")
+        button.btn.btn-primary#btn-confirm(type="button" style="flex:1") ✓ Провести
+        button.btn.btn-danger#btn-cancel(type="button") Отмена
+
+  //- Ссылки для навигации персонала
+  div(style="margin-top:12px;display:flex;gap:8px")
+    a.btn.btn-secondary.btn-sm(href="/sales/history") Журнал продаж
+    a.btn.btn-secondary.btn-sm(href="/stock") Склад
+    if user && user.role === 'admin'
+      a.btn.btn-secondary.btn-sm(href="/admin") Панель
+
+  //- Модальное окно рецепта
+  #rx-modal(style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center;")
+    .card(style="max-width:440px;width:100%;margin:0 20px;")
+      h3(style="margin-bottom:4px") Требуется рецепт
+      p#rx-product-name(style="font-size:13px;color:#555;margin-bottom:12px;")
+      .form-row
+        .form-group
+          label Серия
+          input.form-control#rx-series(type="text" placeholder="АА" maxlength="20")
+        .form-group
+          label Номер *
+          input.form-control#rx-number(type="text" placeholder="12345678")
+      .form-row
+        .form-group
+          label Дата выдачи *
+          input.form-control#rx-date(type="date")
+        .form-group
+          label ФИО врача
+          input.form-control#rx-doctor(type="text")
+      .form-group
+        label ФИО пациента
+        input.form-control#rx-patient(type="text")
+      span#rx-error(style="color:#dc3545;font-size:12px;display:block;margin-bottom:8px;")
+      div(style="display:flex;gap:8px")
+        button.btn.btn-primary#btn-rx-ok Подтвердить рецепт
+        button.btn.btn-secondary#btn-rx-cancel Отмена
+
+  script(src="/js/sales.js")
