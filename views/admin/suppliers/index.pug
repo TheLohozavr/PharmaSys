@@ -9,11 +9,12 @@ block content
       table
         thead
           tr
-            th Наименование
+            th Название
             th ИНН
             th Телефон
             th Email
-            th
+            th Адрес
+            th Действия
         tbody
           each s in suppliers
             tr
@@ -21,5 +22,8 @@ block content
               td= s.inn || '—'
               td= s.phone || '—'
               td= s.email || '—'
+              td= s.address || '—'
               td
-                a.btn.btn-secondary.btn-sm(href=`/admin/suppliers/${s.id}/edit`) Ред.
+                a.btn.btn-secondary.btn-sm(href=`/admin/suppliers/${s.id}/edit`) Изменить
+                form(action=`/admin/suppliers/${s.id}/delete` method="POST" style="display:inline;margin-left:4px")
+                  button.btn.btn-danger.btn-sm(type="submit" onclick="return confirm('Удалить поставщика?')") Удалить

@@ -15,39 +15,156 @@ block content
               th Кол-во
           tbody
             each p in products
-              tr
+              tr.product-row(data-id=p.id)
                 td= p.name
                 td= Number(p.price).toFixed(2) + ' ₽'
                 td= p.quantity
                 td
-                  input(type="number" name=`items[${p.id}][quantity]` min="0" max=`${p.quantity}` value="0"
-                        data-id=`${p.id}` data-price=`${p.price}` data-name=`${p.name}`
-                        style="width:70px;padding:4px;border:1px solid #ccc;border-radius:4px"
-                        onchange="recalcOrder()")
-                  input(type="hidden" name=`items[${p.id}][product_id]` value=`${p.id}`)
+                  input(type="number" 
+                        name=`items[${p.id}][quantity]` 
+                        min="0" 
+                        max=p.quantity 
+                        value="0"
+                        data-id=p.id 
+                        data-price=p.price 
+                        data-name=p.name
+                        data-stock=p.quantity
+                        class="item-quantity"
+                        style="width:70px;padding:4px;border:1px solid #ccc;border-radius:4px")
+                  input(type="hidden" name=`items[${p.id}][product_id]` value=p.id)
       .form-group(style="margin-top:12px")
         label Комментарий
         textarea.form-control(name="comment" rows="2")
       div(style="margin-top:12px;font-size:16px") Итого: <strong id="order-total">0.00</strong> ₽
       div(style="margin-top:12px;display:flex;gap:8px")
-        button.btn.btn-primary(type="submit" onclick="return prepareOrder()") Оформить заказ
+        button.btn.btn-primary(type="submit") Оформить заказ
         a.btn.btn-secondary(href="/") Отмена
 
   script.
-    function recalcOrder() {
-      let total = 0;
-      document.querySelectorAll('[data-price]').forEach(el => {
-        const q = parseInt(el.value) || 0;
-        total += q * parseFloat(el.dataset.price);
+    $(function() {
+      'use strict';
+      
+      // Функция пересчёта итога
+      function recalcOrder() {
+        var total = 0;
+        $('.item-quantity').each(function() {
+          var $input = $(this);
+          var qty = parseInt($input.val()) || 0;
+          var price = parseFloat($input.data('price'));
+          total += qty * price;
+        });
+        $('#order-total').text(total.toFixed(2));
+      }
+      
+      // Функция проверки наличия товаров перед отправкой
+      function hasSelectedItems() {
+        var hasItems = false;
+        $('.item-quantity').each(function() {
+          if ((parseInt($(this).val()) || 0) > 0) {
+            hasItems = true;
+            return false; // break each loop
+          }
+        });
+        return hasItems;
+      }
+      
+      // Обработка изменения количества товара
+      $(document).on('change keyup', '.item-quantity', function() {
+        var $input = $(this);
+        var maxStock = parseInt($input.data('stock')) || 0;
+        var currentVal = parseInt($input.val()) || 0;
+        
+        // Валидация: количество не может превышать остаток
+        if (currentVal > maxStock) {
+          $input.val(maxStock);
+          alert('Доступно только ' + maxStock + ' шт.');
+        }
+        
+        // Количество не может быть отрицательным
+        if (currentVal < 0) {
+          $input.val(0);
+        }
+        
+        recalcOrder();
+        
+        // Визуальный эффект при изменении количества
+        $input.css('background-color', '#fff9c4');
+        setTimeout(function() {
+          $input.css('background-color', '');
+        }, 300);
       });
-      document.getElementById('order-total').textContent = total.toFixed(2);
-    }
-    function prepareOrder() {
-      // Убрать нулевые позиции
-      let hasItems = false;
-      document.querySelectorAll('[data-price]').forEach(el => {
-        if ((parseInt(el.value)||0) > 0) hasItems = true;
+      
+      // Валидация формы перед отправкой
+      $('#order-form').on('submit', function(e) {
+        if (!hasSelectedItems()) {
+          e.preventDefault();
+          alert('Выберите хотя бы один товар');
+          return false;
+        }
+        
+        // Подтверждение оформления заказа
+        var total = parseFloat($('#order-total').text());
+        if (total > 0) {
+          return confirm('Оформить заказ на сумму ' + total.toFixed(2) + ' ₽?');
+        }
+        return true;
       });
-      if (!hasItems) { alert('Выберите хотя бы один товар'); return false; }
-      return true;
-    }
+      
+      // Автоматическая подсветка строк с выбранными товарами
+      function highlightSelectedRows() {
+        $('.product-row').each(function() {
+          var $row = $(this);
+          var $qtyInput = $row.find('.item-quantity');
+          var qty = parseInt($qtyInput.val()) || 0;
+          if (qty > 0) {
+            $row.css('background-color', '#e8f5e9');
+          } else {
+            $row.css('background-color', '');
+          }
+        });
+      }
+      
+      // Обновляем подсветку при изменении количества
+      $(document).on('change keyup', '.item-quantity', function() {
+        highlightSelectedRows();
+      });
+      
+      // Кнопка "Выбрать все" (опционально - можно добавить в интерфейс)
+      // Функция для удобства - можно добавить чекбокс "Выбрать все"
+      $('#select-all-btn').on('click', function() {
+        $('.item-quantity').each(function() {
+          var maxStock = $(this).data('stock');
+          $(this).val(maxStock);
+        });
+        recalcOrder();
+        highlightSelectedRows();
+      });
+      
+      // Кнопка "Очистить все" (опционально)
+      $('#clear-all-btn').on('click', function() {
+        $('.item-quantity').val(0);
+        recalcOrder();
+        highlightSelectedRows();
+      });
+      
+      // Инициализация подсветки
+      highlightSelectedRows();
+      recalcOrder();
+      
+      // Добавляем стили для улучшения UX
+      $('head').append(`
+        <style>
+          .product-row {
+            transition: background-color 0.3s ease;
+          }
+          .item-quantity {
+            transition: all 0.2s ease;
+          }
+          .item-quantity:focus {
+            outline: none;
+            border-color: #1a6b3c;
+            box-shadow: 0 0 0 2px rgba(26,107,60,0.2);
+          }
+        </style>
+      `);
+    });

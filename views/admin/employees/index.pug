@@ -14,7 +14,7 @@ block content
             th Роль
             th Телефон
             th Статус
-            th
+            th Действия
         tbody
           each e in employees
             tr
@@ -24,6 +24,9 @@ block content
               td= e.phone || '—'
               td= e.is_active ? 'Активен' : 'Отключён'
               td
-                form(action=`/admin/employees/${e.id}/toggle` method="POST" style="display:inline")
+                a.btn.btn-secondary.btn-sm(href=`/admin/employees/${e.id}/edit`) Изменить
+                form(action=`/admin/employees/${e.id}/toggle` method="POST" style="display:inline;margin-left:4px")
                   button.btn.btn-sm(class=e.is_active ? 'btn-warning' : 'btn-secondary' type="submit")
                     = e.is_active ? 'Отключить' : 'Включить'
+                form(action=`/admin/employees/${e.id}/delete` method="POST" style="display:inline;margin-left:4px")
+                  button.btn.btn-danger.btn-sm(type="submit" onclick="return confirm('Удалить сотрудника?')") Удалить

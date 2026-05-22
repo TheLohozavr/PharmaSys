@@ -1,0 +1,61 @@
+extends ../layout
+
+block content
+  h2.page-title Мой профиль
+  
+  .row
+    .col-md-6
+      .card
+        h3 Основные данные
+        form(method="POST" action="/profile")
+          .form-group
+            label ФИО *
+            input.form-control(type="text" name="full_name" value=user.full_name required)
+          .form-group
+            label Телефон
+            input.form-control(type="text" name="phone" value=user.phone || '')
+          .form-group
+            label Email
+            input.form-control(type="email" name="email" value=user.email || '')
+          button.btn.btn-primary(type="submit") Обновить данные
+    
+    .col-md-6
+      .card
+        h3 Смена пароля
+        form(method="POST" action="/profile/password")
+          .form-group
+            label Текущий пароль *
+            input.form-control(type="password" name="old_password" required)
+          .form-group
+            label Новый пароль *
+            input.form-control(type="password" name="new_password" required)
+          .form-group
+            label Подтверждение пароля *
+            input.form-control(type="password" name="new_password2" required)
+          button.btn.btn-warning(type="submit") Сменить пароль
+
+  // Быстрые ссылки (только для соответствующих ролей)
+  if role === 'customer'
+    .card
+      h3 Быстрые ссылки
+      .btn-group
+        a.btn.btn-outline-primary(href="/") В каталог
+        a.btn.btn-outline-primary(href="/orders/my") Мои заказы
+  else if role === 'pharmacist'
+    .card
+      h3 Быстрые ссылки
+      .btn-group
+        a.btn.btn-outline-primary(href="/sales") Касса
+        a.btn.btn-outline-primary(href="/stock") Склад
+        a.btn.btn-outline-primary(href="/orders") Заказы
+  else if role === 'admin'
+    .card
+      h3 Быстрые ссылки
+      .btn-group
+        a.btn.btn-outline-primary(href="/admin") Админ-панель
+        a.btn.btn-outline-primary(href="/admin/products") Управление товарами
+        a.btn.btn-outline-primary(href="/admin/employees") Сотрудники
+
+  if role !== 'customer'
+    .card
+      p.text-muted Информация: вы вошли как сотрудник. Для изменения роли или других служебных данных обратитесь к администратору.

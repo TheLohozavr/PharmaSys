@@ -1,0 +1,62 @@
+extends ../../layout
+
+block content
+  h2.page-title Рецепт №#{prescription.number}
+  .card
+    .form-row
+      .form-group(style="flex:1")
+        label Серия
+        p.form-control-static= prescription.series || '—'
+      .form-group(style="flex:1")
+        label Номер
+        p.form-control-static= prescription.number
+    .form-row
+      .form-group(style="flex:1")
+        label Дата выдачи
+        p.form-control-static= new Date(prescription.issued_at).toLocaleDateString('ru-RU')
+      .form-group(style="flex:1")
+        label Врач
+        p.form-control-static= prescription.doctor_name || '—'
+    .form-group
+      label Пациент
+      p.form-control-static= prescription.patient_name || '—'
+    
+    hr
+    h3 Информация о товаре
+    .form-row
+      .form-group(style="flex:1")
+        label Препарат
+        p.form-control-static= prescription.product_name
+      .form-group(style="flex:1")
+        label Цена на момент продажи
+        p.form-control-static= prescription.sold_price ? Number(prescription.sold_price).toFixed(2) + ' ₽' : '—'
+      .form-group(style="flex:1")
+        label Количество
+        p.form-control-static= prescription.sold_quantity || '—'
+    
+    hr
+    h3 Информация о продаже
+    if prescription.sale_id
+      .form-row
+        .form-group(style="flex:1")
+          label Продажа №
+          p.form-control-static
+            a(href=`/sales/${prescription.sale_id}`)= prescription.sale_id
+        .form-group(style="flex:1")
+          label Дата продажи
+          p.form-control-static= new Date(prescription.sale_date).toLocaleString('ru-RU')
+        .form-group(style="flex:1")
+          label Сумма чека
+          p.form-control-static= Number(prescription.sale_total).toFixed(2) + ' ₽'
+      .form-row
+        .form-group(style="flex:1")
+          label Покупатель
+          p.form-control-static= prescription.customer_name || '—'
+        .form-group(style="flex:1")
+          label Кассир
+          p.form-control-static= prescription.employee_name || '—'
+    else
+      .alert.alert-warning Рецепт не был использован в продаже (или продажа удалена)
+
+    div(style="margin-top:20px")
+      a.btn.btn-secondary(href="/admin/prescriptions") ← Назад к списку

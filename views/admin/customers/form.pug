@@ -1,0 +1,40 @@
+extends ../../layout
+
+block content
+  h2.page-title= customer ? 'Редактировать покупателя' : 'Новый покупатель'
+  .card(style="max-width:600px")
+    form(action=customer ? `/admin/customers/${customer.id}` : '/admin/customers' method="POST")
+      if customer
+        input(type="hidden" name="_method" value="POST")
+      .form-group
+        label ФИО *
+        input.form-control(type="text" name="full_name" value=customer ? customer.full_name : '' required)
+      .form-group
+        label Логин *
+        input.form-control(type="text" name="login" value=customer ? customer.login : '' required)
+      .form-group
+        label Пароль
+        if customer
+          small.text-muted (оставьте пустым, чтобы не менять)
+        input.form-control(type="password" name="password")
+      .form-row
+        .form-group
+          label Телефон
+          input.form-control(type="text" name="phone" value=customer ? (customer.phone||'') : '')
+        .form-group
+          label Email
+          input.form-control(type="email" name="email" value=customer ? (customer.email||'') : '')
+      .form-row
+        .form-group
+          label Номер карты
+          input.form-control(type="text" name="card_number" value=customer ? (customer.card_number||'') : '')
+        .form-group
+          label Скидка (%)
+          input.form-control(type="number" step="0.01" name="discount_pct" value=customer ? customer.discount_pct : 0)
+      if customer
+        .form-group
+          label Бонусные баллы
+          input.form-control(type="number" name="bonus_points" value=customer ? customer.bonus_points : 0)
+      div(style="margin-top:16px;display:flex;gap:8px")
+        button.btn.btn-primary(type="submit") Сохранить
+        a.btn.btn-secondary(href="/admin/customers") Отмена

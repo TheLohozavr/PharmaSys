@@ -1,0 +1,39 @@
+extends ../../layout
+
+block content
+  h2.page-title Рецепты, привязанные к продажам
+  .card
+    .table-wrap
+      table
+        thead
+          tr
+            th ID
+            th № рецепта
+            th Пациент
+            th Врач
+            th Препарат
+            th Дата выдачи
+            th Продажа
+            th Покупатель
+            th Кассир
+        tbody
+          if prescriptions.length === 0
+            tr
+              td(colspan=9 style="text-align:center") Нет данных
+          else
+            each rx in prescriptions
+              tr
+                td= rx.id
+                td
+                  a(href=`/admin/prescriptions/${rx.id}`)= rx.series ? `${rx.series} №${rx.number}` : `№${rx.number}`
+                td= rx.patient_name || '—'
+                td= rx.doctor_name || '—'
+                td= rx.product_name
+                td= new Date(rx.issued_at).toLocaleDateString('ru-RU')
+                td
+                  if rx.sale_id
+                    a(href=`/sales/${rx.sale_id}`) Чек №#{rx.sale_id}
+                  else
+                    span —
+                td= rx.customer_name || '—'
+                td= rx.employee_name || '—'

@@ -42,6 +42,7 @@ app.use('/admin',       require('./routes/admin'));
 app.use('/sales',       require('./routes/sales'));
 app.use('/stock',       require('./routes/stock'));
 app.use('/orders',      require('./routes/orders'));
+app.use('/profile',     require('./routes/profile'));
 
 // ── 404 ───────────────────────────────────────────────────────────────────────
 app.use((req, res) => res.status(404).render('error', { code: 404, message: 'Страница не найдена' }));

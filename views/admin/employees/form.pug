@@ -1,34 +1,38 @@
 extends ../../layout
 
 block content
-  h2.page-title Добавить сотрудника
+  h2.page-title= employee ? 'Редактировать сотрудника' : 'Добавить сотрудника'
   .card(style="max-width:500px")
-    form(action="/admin/employees" method="POST")
+    form(action=employee ? `/admin/employees/${employee.id}` : '/admin/employees' method="POST")
+      if employee
+        input(type="hidden" name="_method" value="POST")
       .form-group
         label ФИО *
-        input.form-control(type="text" name="full_name" required)
+        input.form-control(type="text" name="full_name" value=employee ? employee.full_name : '' required)
       .form-row
         .form-group
           label Логин *
-          input.form-control(type="text" name="login" required)
+          input.form-control(type="text" name="login" value=employee ? employee.login : '' required)
         .form-group
-          label Пароль *
-          input.form-control(type="password" name="password" required)
+          label Пароль
+          if employee
+            small.text-muted (оставьте пустым, чтобы не менять)
+          input.form-control(type="password" name="password")
       .form-group
         label Роль *
         select.form-control(name="role_id" required)
           each r in roles
-            option(value=r.id)= r.name
+            option(value=r.id selected=(employee && employee.role_id == r.id))= r.name
       .form-row
         .form-group
           label Телефон
-          input.form-control(type="text" name="phone")
+          input.form-control(type="text" name="phone" value=employee ? (employee.phone||'') : '')
         .form-group
           label Email
-          input.form-control(type="email" name="email")
+          input.form-control(type="email" name="email" value=employee ? (employee.email||'') : '')
       .form-group
         label Дата приёма на работу
-        input.form-control(type="date" name="hired_at")
+        input.form-control(type="date" name="hired_at" value=employee && employee.hired_at ? employee.hired_at.toISOString().slice(0,10) : '')
       div(style="display:flex;gap:8px;margin-top:12px")
         button.btn.btn-primary(type="submit") Сохранить
         a.btn.btn-secondary(href="/admin/employees") Отмена

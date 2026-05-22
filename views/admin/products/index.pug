@@ -9,6 +9,7 @@ block content
       table
         thead
           tr
+            th Фото
             th ID
             th Наименование
             th МНН
@@ -20,6 +21,11 @@ block content
         tbody
           each p in products
             tr
+              td
+                if p.image
+                  img(src=`/uploads/products/${p.image}` width="40" style="border-radius:4px")
+                else
+                  span —
               td= p.id
               td= p.name
               td= p.inn_name || '—'
@@ -29,5 +35,5 @@ block content
               td= Number(p.price).toFixed(2) + ' ₽'
               td
                 a.btn.btn-secondary.btn-sm(href=`/admin/products/${p.id}/edit`) Ред.
-                form(action=`/admin/products/${p.id}/delete` method="POST" style="display:inline;margin-left:4px")
-                  button.btn.btn-danger.btn-sm(type="submit" onclick="return confirm('Удалить?')") Удал.
+                form(action=`/admin/products/${p.id}?_method=DELETE` method="POST" style="display:inline;margin-left:4px")
+                  button.btn.btn-danger.btn-sm(type="submit" onclick="return confirm('Удалить товар? Удалится и изображение!')") Удал.

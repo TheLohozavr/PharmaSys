@@ -2,11 +2,14 @@ extends ../../layout
 
 block content
   h2.page-title Покупатели
+  div(style="margin-bottom:16px")
+    a.btn.btn-primary(href="/admin/customers/new") + Добавить покупателя
   .card
     .table-wrap
       table
         thead
           tr
+            th ID
             th ФИО
             th Логин
             th Телефон
@@ -14,9 +17,11 @@ block content
             th Бонусы
             th Скидка %
             th Дата рег.
+            th Действия
         tbody
           each c in customers
             tr
+              td= c.id
               td= c.full_name
               td= c.login
               td= c.phone || '—'
@@ -24,3 +29,7 @@ block content
               td= c.bonus_points
               td= c.discount_pct + '%'
               td= new Date(c.created_at).toLocaleDateString('ru-RU')
+              td
+                a.btn.btn-secondary.btn-sm(href=`/admin/customers/${c.id}/edit`) Изменить
+                form(action=`/admin/customers/${c.id}/delete` method="POST" style="display:inline;margin-left:4px")
+                  button.btn.btn-danger.btn-sm(type="submit" onclick="return confirm('Удалить покупателя?')") Удалить
