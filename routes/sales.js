@@ -35,8 +35,6 @@ router.get('/history', async (req, res) => {
 });
 
 // ── GET /sales/lookup — AJAX поиск товара ────────────────────
-// ?id=N    → поиск по product_id
-// ?barcode=X → поиск по штрихкоду
 router.get('/lookup', async (req, res) => {
   const { barcode, id } = req.query;
   try {
@@ -142,7 +140,6 @@ router.post('/', async (req, res) => {
       });
     }
 
-    // Скидка и бонусы
     let discountAmt = 0;
     let bonusUsed   = 0;
     let bonusAccrued = 0;
@@ -189,7 +186,6 @@ router.post('/', async (req, res) => {
       }
     }
 
-    // Обновить бонусы покупателя
     if (customer) {
       await conn.query(
         'UPDATE customers SET bonus_points = bonus_points - ? + ? WHERE id = ?',

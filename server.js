@@ -27,7 +27,7 @@ app.use(session({
 
 app.use(flash());
 
-// Передаём flash-сообщения и пользователя во все шаблоны
+
 app.use((req, res, next) => {
   res.locals.success = req.flash('success');
   res.locals.error   = req.flash('error');
@@ -35,7 +35,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// ── Маршруты ──────────────────────────────────────────────────────────────────
+//Маршруты
 app.use('/',            require('./routes/catalog'));
 app.use('/auth',        require('./routes/auth'));
 app.use('/admin',       require('./routes/admin'));
@@ -44,9 +44,9 @@ app.use('/stock',       require('./routes/stock'));
 app.use('/orders',      require('./routes/orders'));
 app.use('/profile',     require('./routes/profile'));
 
-// ── 404 ───────────────────────────────────────────────────────────────────────
+//404
 app.use((req, res) => res.status(404).render('error', { code: 404, message: 'Страница не найдена' }));
 
-// ── Запуск ────────────────────────────────────────────────────────────────────
+//Запуск
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Сервер запущен: http://localhost:${PORT}`));

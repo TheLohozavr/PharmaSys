@@ -2,15 +2,12 @@
 $(function() {
   'use strict';
 
-  // Состояние кассы
-  var items = [];          // [{product, quantity, prescription_id}]
+  var items = [];
   var customer = null;
   var pendingRxProduct = null;
 
-  // Вспомогательные функции
   function fmt(n) { return Number(n).toFixed(2); }
 
-  // Пересчёт итогов
   function recalc() {
     var subtotal = 0;
     $.each(items, function(i, item) {
@@ -31,7 +28,6 @@ $(function() {
     return { subtotal: subtotal, discountAmt: discountAmt, bonusUsed: maxBonus };
   }
 
-  // Отрисовка списка позиций чека
   function renderItems() {
     var $list = $('#item-list');
     if (items.length === 0) {
@@ -172,7 +168,6 @@ $(function() {
     });
   });
 
-  // Обработка изменения количества через делегирование событий
   $(document).on('change', '.pos-qty-input', function() {
     var idx = $(this).data('idx');
     var val = $(this).val();
@@ -181,7 +176,6 @@ $(function() {
     renderItems();
   });
 
-  // Обработка удаления позиции через делегирование
   $(document).on('click', '.pos-item-row .btn-danger', function() {
     var idx = $(this).data('idx');
     items.splice(idx, 1);
@@ -224,7 +218,6 @@ $(function() {
         }
         items.push({ product: pendingRxProduct, quantity: 1, prescription_id: data.prescription_id });
         renderItems();
-        // Очистить форму
         $('#rx-series, #rx-number, #rx-date, #rx-doctor, #rx-patient').val('');
         $('#rx-modal').fadeOut(200);
         pendingRxProduct = null;

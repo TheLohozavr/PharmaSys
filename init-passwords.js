@@ -1,11 +1,4 @@
 'use strict';
-/**
- * Запустить ОДИН РАЗ после импорта database.sql:
- *   node init-passwords.js
- *
- * Устанавливает реальные bcrypt-хэши для тестовых аккаунтов.
- */
-
 const bcrypt = require('bcrypt');
 const db     = require('./db');
 
